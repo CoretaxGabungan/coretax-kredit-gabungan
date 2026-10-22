@@ -88,6 +88,19 @@ if uploaded:
             with st.expander(f"📦 Masa Faktur {mf} - {len(sub)} faktur"):
                 st.dataframe(sub[[col_no, col_tgl]], use_container_width=True)
 
+        st.divider()
+        st.subheader("📥 Template Kosong Berkelanjutan")
+        template_df = pd.DataFrame({
+            "No Faktur Pajak": ["010.000-25.12345678"],
+            "Tgl Faktur (YYYY-MM-DD)": ["2026-10-05"],
+            "DPP": [10000000],
+            "PPN": [1100000]
+        })
+        output_tpl = io.BytesIO()
+        with pd.ExcelWriter(output_tpl, engine='openpyxl') as writer:
+            template_df.to_excel(writer, index=False, sheet_name='DATA FAKTUR')
+        st.download_button("📥 Download Template Excel Kosong", output_tpl.getvalue(), "Template_Kredit_Gabungan.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    
     st.warning("⚠️ Cara pakai di Coretax: Filter per Masa Faktur sesuai kelompok di atas, lalu Kreditkan manual. Aplikasi ini hanya bantu gabungkan & filter biar legal.")
 else:
     st.info("👆 Upload file dulu untuk mulai")
